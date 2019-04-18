@@ -1,5 +1,7 @@
 package ru.scratty.translator
 
+import com.google.gson.JsonDeserializer
+
 enum class Language(val code: String) {
     AZERBAIJAN("az"),
     ALBANIAN("sq"),
@@ -93,5 +95,20 @@ enum class Language(val code: String) {
     ESTONIAN("et"),
     ESPERANTO("eo"),
     JAVANESE("jv"),
-    JAPANESE("ja")
+    JAPANESE("ja");
+
+    companion object {
+
+        fun getLanguageByCode(code: String): Language {
+            val lang = values().find { it.code == code }
+
+            if (lang != null) {
+                return lang
+            } else {
+                throw RuntimeException("Invalid language code ($code)")
+            }
+        }
+
+        val deserializer = JsonDeserializer<Language> { json, _, _ -> getLanguageByCode(json!!.asString) }
+    }
 }

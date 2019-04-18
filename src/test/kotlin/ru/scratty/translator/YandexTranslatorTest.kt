@@ -21,4 +21,12 @@ internal class YandexTranslatorTest {
 
         assertEquals(first, second)
     }
+
+    @Test
+    fun detectLanguage() {
+        val expected = Language.ENGLISH
+        val actual = translator.detectLanguage("Hi")
+
+        assertEquals(expected, actual.lang)
+    }
 }
