@@ -2,7 +2,7 @@ package ru.scratty.translator
 
 data class TranslateResult(
     val code: Int,
-    val lang: String,
+    val lang: FromToLanguages,
     val text: Array<String>
 ) {
     override fun equals(other: Any?): Boolean {

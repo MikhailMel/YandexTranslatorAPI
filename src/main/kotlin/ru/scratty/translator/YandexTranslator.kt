@@ -1,6 +1,5 @@
 package ru.scratty.translator
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import ru.scratty.http.Http
 import ru.scratty.http.HttpUrl
@@ -15,7 +14,6 @@ class YandexTranslator(private val apiKey: String) {
         private const val DETECT_LANGUAGE_PATH = ROOT_PATH + "detect"
 
         private const val KEY_PARAMETER = "key"
-        private const val TEXT_PARAMETER = "key"
     }
 
     fun translate(text: String, from: Language? = null, to: Language) = translate(
@@ -34,7 +32,10 @@ class YandexTranslator(private val apiKey: String) {
         val response = Http.post(url, parameters)
 
         if (response.code == 200) {
-            return Gson().fromJson<TranslateResult>(response.data, TranslateResult::class.java)
+            return GsonBuilder()
+                .registerTypeAdapter(FromToLanguages::class.java, FromToLanguages.deserializer)
+                .create()
+                .fromJson<TranslateResult>(response.data, TranslateResult::class.java)
         } else {
             throw TranslateError(response.data)
         }
